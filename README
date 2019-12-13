@@ -1,0 +1,64 @@
+运行代码方法：
+先cd到链端， 输入./nodes/127.0.0.1/start_all.sh 来启动节点
+
+再cd到后端/dist，输入bash asset_run.sh 即可看到usage
+支持的操作有：
+bash asset_run.sh deploy
+bash asset_run.sh show_balances    account
+bash asset_run.sh register_account account amount
+bash asset_run.sh show_bill        lender  borrower
+bash asset_run.sh create_bill      lender  borrower amount
+bash asset_run.sh remove_bill      lender  borrower
+
+第一条命令为部署合约到链上，其余命令的解释如下：
+
+function show_balances(string account) public constant returns (int, int)
+	描述 ： 根据资产账户查询资产金额
+	参数 ： 
+			account : 资产账户
+	返回值：
+			参数一： 成功返回0, 账户不存在返回-1
+			参数二： 第一个参数为0时有效，资产金额
+
+function register_account(string account, int amount) public returns (int)
+	描述 ： 资产注册
+	参数 ： 
+			account : 资产账户
+			amount  : 资产金额
+	返回值：
+			0  资产注册成功
+			-1 资产账户已存在
+			-2 其他错误（表格插入数据失败）
+
+function show_bill(string lender, string borrower) public constant returns (int, int)
+	描述 ： 显示单条账单记录
+	参数 ： 
+			account : 资产账户
+			borrower  : 借款账户
+	返回值：
+		参数一：
+			0  有此记录
+			-1 无该资产账户
+			-2 无该借款记录
+		参数二： 借款金额
+
+function create_bill(string lender, string borrower, int amount) public returns (int)
+	描述 ： 创建应收账款单据
+	参数 ： 
+			borrower  : 借款账户
+			lender : 放款账户
+			amount ：借款金额
+	返回值：
+			0  成功
+			-1 账户不存在
+
+function remove_bill(string lender, string borrower) public returns (int)
+	描述 ： 结算单据
+	参数 ： 
+			borrower  : 借款账户
+			lender : 放款账户
+	返回值：
+			0  成功
+			-1 账户不存在
+			-2 账款不存在
+			-3 账户余额不足无法结算
